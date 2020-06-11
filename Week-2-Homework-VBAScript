@@ -1,0 +1,101 @@
+Sub Alphabetical()
+    
+    ' Set initial variable for the ticker name
+    Dim Ticker_name As String
+    Range("I1") = "Ticker"
+
+    ' Set initial variable for the Total Ticker Volume
+    Dim Total_ticker As Double
+    Total_ticker = 0
+    Range("L1") = "Total Volume"
+
+    ' Set initial variable for open price
+    Dim Open_price As Double
+    Open_price = 0
+
+    ' Set initial variable for close price
+    Dim Close_price As Double
+    Close_price = 0
+
+    ' Set initial variable for the Yearly Price
+    Dim Yearly_price As Double
+    Yearly_price = 0
+    Range("J1") = "Yearly Price"
+
+    ' Set initial variable for the Percentage Change
+    Dim Percent_Change As Double
+    Percent_Change = 0
+    Range("K1") = "Percentage Change"
+
+    ' Keep track of the location for each ticker name
+    Dim Summary_table_Row As Integer
+    Summary_table_Row = 2
+
+    ' Set initial row count
+    Dim Lastrow As Long
+    Dim i As Long
+    Lastrow = Cells(Rows.Count, 1).End(xlUp).Row
+
+    ' Set initial value for Open Price
+    Open_price = Cells(2, 3).Value
+
+        ' Loop from 2 to last row
+        For i = 2 To Lastrow
+      
+                ' Check if we are within the same ticker name,
+                If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+            
+                    ' Set the ticker
+                    Ticker_name = Cells(i, 1).Value
+                    ' Calculate Yearly_Price and Percent_Change
+                    Close_price = Cells(i, 6).Value
+                    Yearly_price = Close_price - Open_price
+                    
+                    If Yearly_price > 0 Then
+                    
+                    Percent_Change = (Yearly_price / Open_price) * 100
+
+                    End If
+
+                    ' Add to the Ticker name total volume
+                    Total_ticker = Total_ticker + Cells(i, 7).Value
+              
+                    ' Print the Ticker Name
+                    Range("I" & Summary_table_Row).Value = Ticker_name
+                    ' Print the Yearly Price
+                    Range("J" & Summary_table_Row).Value = Yearly_price
+                
+                        ' Fill Yearly_Price with Green and Red colors
+                        If (Yearly_price > 0) Then
+                            
+                            'Fill column with GREEN color - good
+                            Range("J" & Summary_table_Row).Interior.ColorIndex = 4
+                            ElseIf (Yearly_price <= 0) Then
+                            'Fill column with RED color - bad
+                            Range("J" & Summary_table_Row).Interior.ColorIndex = 3
+                            
+                        End If
+                
+                    ' Print the Ticker Percent Change
+                    Range("K" & Summary_table_Row).Value = ((Percent_Change) & "%")
+                    ' Print the Total Ticker
+                    Range("L" & Summary_table_Row).Value = Total_ticker
+                
+                    ' Add 1 row to the summary table
+                    Summary_table_Row = Summary_table_Row + 1
+                    ' Reset Yearly_Price
+                    Yearly_price = 0
+                    ' Next Ticker Open_Price
+                    Open_price = Cells(i + 1, 3).Value
+                    'Reset Total Ticker
+                    Total_ticker = 0
+                    Percent_Change = 0
+            
+                Else
+                    ' Increase the Total Ticker
+                    Total_ticker = Total_ticker + Cells(i, 7).Value
+                End If
+            
+        Next i
+
+End Sub
