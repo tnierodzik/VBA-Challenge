@@ -51,11 +51,13 @@ Sub Alphabetical()
                     Close_price = Cells(i, 6).Value
                     Yearly_price = Close_price - Open_price
                     
-                    If Yearly_price > 0 Then
+                        ' Calculate if Yealry_price is greater than zero
+                        If Yearly_price > 0 Then
                     
-                    Percent_Change = (Yearly_price / Open_price) * 100
+                            'Caluclate Percent_Change
+                            Percent_Change = (Yearly_price / Open_price) * 100
 
-                    End If
+                        End If
 
                     ' Add to the Ticker name total volume
                     Total_ticker = Total_ticker + Cells(i, 7).Value
